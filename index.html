@@ -14,19 +14,32 @@
     <script src="scripts/main.js"></script>
 
     <script>
-        var socket = io();
+        (async () => {
+            try {
+                    // Request all drawings
+                    const objectsFetch = await fetch('/api/objects');
+                    const objects = await objectsFetch.json();
 
-        socket.emit('chat message', 'Yeet!!');
+                    objects.forEach(drawing => {
+                        canvas.add(new fabric.Rect(drawing));
+                    });
+                    
+                    // Setup socket events
+                    socket.on('object-event', msg => {
+                        console.log('object-event', msg);
 
+                        // Get user drawing that was updated
+                        const toUpdate = canvas.getObjects().find(d => d.id == msg.id);
+                        toUpdate.set(msg.object);
+                        toUpdate.setCoords();
 
-        socket.on('chat message', msg => {
-            console.log('Message', msg);
-        });
-
-        socket.on('object-event', msg => {
-            console.log('object-event', msg);
-        });
-    </script>
-</body>
-
-</html>
+                        canvas.renderAll();
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            })();
+        </script>
+    </body>
+    
+    </html>

@@ -1,11 +1,15 @@
 var canvas = new fabric.Canvas('c');
-var rect = new fabric.Rect();
+var socket = io();
 
+// Events setup
 canvas.on('mouse:over', e => {
     if (!e?.target?.id) return;
+
+    // TODO: Only execute rest of function if opacity is not 0.7
+    // This way, we do not keep sending updates
     
     e.target.set('opacity', '0.7');
-    socket?.emit('object-event', e.target);
+    sendUpdate(e);
     
     canvas.renderAll();
 });
@@ -13,26 +17,20 @@ canvas.on('mouse:over', e => {
 canvas.on('mouse:up', e => {
     if (!e?.target?.id) return;
     
-    socket?.emit('object-event', e.target);
+    sendUpdate(e);
+
+    canvas.renderAll();
 });
 
 canvas.on('mouse:out', e => {
     if (!e?.target?.id) return;
 
     e.target.set('opacity', '1');
-    socket?.emit('object-event', e.target);
+    sendUpdate(e);
 
     canvas.renderAll();
 });
 
-const getRandom = (max) => { return Math.random() * (max ? max : 500); }
-
-for (let i = 0; i < 15; i++) {
-    canvas.add(new fabric.Rect({
-        id: getRandom(),
-        left: getRandom(),
-        top: getRandom(),
-        width: getRandom(100),
-        height: getRandom(100)
-    }));
+const sendUpdate = e => {
+    socket.emit('object-event', { id: e.target.id, object: e.target });
 }
