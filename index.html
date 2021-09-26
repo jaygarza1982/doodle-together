@@ -8,8 +8,25 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <canvas id="c"></canvas>
+    <canvas id="c" width="1920" height="1080"></canvas>
     <script src="scripts/fabric.min.js"></script>
+    <script src="scripts/socket.io.min.js"></script>
     <script src="scripts/main.js"></script>
+
+    <script>
+        var socket = io();
+
+        socket.emit('chat message', 'Yeet!!');
+
+
+        socket.on('chat message', msg => {
+            console.log('Message', msg);
+        });
+
+        socket.on('object-event', msg => {
+            console.log('object-event', msg);
+        });
+    </script>
 </body>
+
 </html>
