@@ -6,6 +6,7 @@ RUN apk add tzdata
 WORKDIR /app
 
 #Copy and install node dependencies
+COPY package.json .
 COPY package-lock.json .
 RUN npm install
 RUN npm install nodemon -g

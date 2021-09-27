@@ -7,6 +7,7 @@ services:
     build:
       context: ./server
     volumes:
+      - /app/node_modules
       - ./server:/app
     ports:
       - 8051:3000
