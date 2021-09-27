@@ -4,9 +4,6 @@ var socket = io();
 // Events setup
 canvas.on('mouse:over', e => {
     if (!e?.target?.id) return;
-
-    // TODO: Only execute rest of function if opacity is not 0.7
-    // This way, we do not keep sending updates
     
     e.target.set('opacity', '0.7');
     sendUpdate(e);
