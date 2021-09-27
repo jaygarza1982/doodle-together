@@ -1,33 +1,25 @@
-var canvas = new fabric.Canvas('c');
-var socket = io();
+(async () => {
+    try {
+        // Request all drawings
+        const objectsFetch = await fetch('/api/objects');
+        const objects = await objectsFetch.json();
 
-// Events setup
-canvas.on('mouse:over', e => {
-    if (!e?.target?.id) return;
-    
-    e.target.set('opacity', '0.7');
-    sendUpdate(e);
-    
-    canvas.renderAll();
-});
+        for (const id in objects) {
+            canvas.add(new fabric.Rect(objects[id]));
+        }
 
-canvas.on('mouse:up', e => {
-    if (!e?.target?.id) return;
-    
-    sendUpdate(e);
+        // Setup socket events
+        socket.on('object-event', msg => {
+            console.log('object-event', msg);
 
-    canvas.renderAll();
-});
+            // Get user drawing that was updated
+            const toUpdate = canvas.getObjects().find(d => d.id == msg.id);
+            toUpdate.set(msg.object);
+            toUpdate.setCoords();
 
-canvas.on('mouse:out', e => {
-    if (!e?.target?.id) return;
-
-    e.target.set('opacity', '1');
-    sendUpdate(e);
-
-    canvas.renderAll();
-});
-
-const sendUpdate = e => {
-    socket.emit('object-event', { id: e.target.id, object: e.target });
-}
+            canvas.renderAll();
+        });
+    } catch (error) {
+        console.log(error);
+    }
+})();
