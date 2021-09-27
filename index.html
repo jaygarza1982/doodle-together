@@ -20,9 +20,9 @@
                     const objectsFetch = await fetch('/api/objects');
                     const objects = await objectsFetch.json();
 
-                    objects.forEach(drawing => {
-                        canvas.add(new fabric.Rect(drawing));
-                    });
+                    for (const id in objects) {
+                        canvas.add(new fabric.Rect(objects[id]));
+                    }
                     
                     // Setup socket events
                     socket.on('object-event', msg => {
