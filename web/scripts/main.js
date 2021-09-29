@@ -1,3 +1,13 @@
+
+const typeAction = {
+    'i-text': object => {
+        canvas.add(new fabric.IText(object.text, object));
+    },
+    'rect': object => {
+        canvas.add(new fabric.Rect(object));
+    },
+};
+
 (async () => {
     try {
         // Request all drawings
@@ -12,12 +22,7 @@
 
             console.log(type);
 
-            if (type == 'i-text') {
-                canvas.add(new fabric.IText(object.text, object));
-            }
-            else if (type == 'rect') {
-                canvas.add(new fabric.Rect(object));
-            }
+            typeAction[type](object);
         }
 
         // Setup socket events
@@ -31,12 +36,11 @@
                 toUpdate.set(msg.object);
                 toUpdate.setCoords();
             }
+            // If we did not find our object, add it based on the type
             else {
-                // TODO: Parse if this really is a new text object
-                // Or if it is a different type of object
+                const type  = msg?.object?.type ? msg.object.type : 'rect';
 
-                // When adding a new text object, the text must be set as the first parameter
-                canvas.add(new fabric.IText(msg.object.text, msg.object));
+                typeAction[type](msg.object);
             }
 
             canvas.renderAll();
