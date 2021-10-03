@@ -5,6 +5,8 @@ var currentlyHovering = false;
 
 // Events setup
 canvas.on('mouse:over', e => {
+    if (mode != 'select') return;
+
     if (!e?.target?.id) return;
 
     currentlyHovering = true;
@@ -16,6 +18,7 @@ canvas.on('mouse:over', e => {
 });
 
 canvas.on('mouse:up', e => {
+    if (mode != 'select') return;
     if (!e?.target?.id) return;
     
     sendUpdate(e);
@@ -24,6 +27,7 @@ canvas.on('mouse:up', e => {
 });
 
 canvas.on('mouse:out', e => {
+    if (mode != 'select') return;
     if (!e?.target?.id) return;
 
     currentlyHovering = false;
@@ -35,6 +39,8 @@ canvas.on('mouse:out', e => {
 });
 
 canvas.on('mouse:dblclick', e => {
+    if (mode != 'select') return;
+
     // If we are not on an object, create text
     if (!currentlyHovering) {
         canvas.add(new fabric.IText('Text',{
@@ -48,6 +54,34 @@ canvas.on('mouse:dblclick', e => {
     }
 });
 
+canvas.on('path:created', e => {
+    e.path.id = ''+Math.random();
+    e.path.type = 'path';
+
+    // TODO: Send drawing here
+    // Currently sends only if updated from hover or move
+});
+
+const sendRawUpdate = object => {
+    socket.emit('object-event', object);
+}
+
 const sendUpdate = e => {
     socket.emit('object-event', { id: e.target.id, object: e.target });
+}
+
+const drawingClick = () => {
+    mode = 'draw';
+
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.width = 5;
+    canvas.freeDrawingBrush.color = '#000';
+    
+    console.log('mode is now ', mode);
+}
+
+const selectClick = () => {
+    mode = 'select';
+    canvas.isDrawingMode = false;
+    console.log('mode is now ', mode);
 }

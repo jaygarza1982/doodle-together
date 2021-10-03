@@ -1,3 +1,5 @@
+// Possible modes: select, draw
+var mode = 'select';
 
 const typeAction = {
     'i-text': object => {
@@ -5,6 +7,15 @@ const typeAction = {
     },
     'rect': object => {
         canvas.add(new fabric.Rect(object));
+    },
+    'path': object => {
+        const { path } = object;
+        
+        // When adding a fabric path, it takes a string value of representation of path
+        const reducedPath = path.reduce((prev, next) => prev.concat(next));
+        const stringPath = reducedPath.reduce((prev, next) => { return prev + ' ' + next; }, '');
+        
+        canvas.add(new fabric.Path(stringPath, object));
     },
 };
 

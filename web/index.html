@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+    <nav class="nav-bar">
+        <div onclick="drawingClick()" class="nav-bar-item">Drawing</div>
+        <div onclick="selectClick()" class="nav-bar-item">Select</div>
+    </nav>
     <canvas id="c" width="1920" height="1080"></canvas>
     <script src="scripts/libs/fabric.js"></script>
     <script src="scripts/libs/socket.io.min.js"></script>
