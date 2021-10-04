@@ -58,8 +58,11 @@ canvas.on('path:created', e => {
     e.path.id = ''+Math.random();
     e.path.type = 'path';
 
-    // TODO: Send drawing here
-    // Currently sends only if updated from hover or move
+    // Find our added drawing
+    const addedDrawing = canvas.getObjects().filter(o => o.id == e.path.id)[0];
+
+    // Send update to server
+    sendRawUpdate({ id: e.path.id, object: addedDrawing });
 });
 
 const sendRawUpdate = object => {
