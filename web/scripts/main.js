@@ -1,6 +1,9 @@
 // Possible modes: select, draw
 var mode = 'select';
 
+// For drawing and other colored items
+var fillColor = '#000';
+
 const typeAction = {
     'i-text': object => {
         canvas.add(new fabric.IText(object.text, object));

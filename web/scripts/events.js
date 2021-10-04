@@ -46,7 +46,7 @@ canvas.on('mouse:dblclick', e => {
         canvas.add(new fabric.IText('Text',{
             left: e.pointer.x,
             top: e.pointer.y, 
-            fill: 'black',
+            fill: fillColor,
             id: ''+Math.random()
         }));
 
@@ -78,7 +78,6 @@ const drawingClick = () => {
 
     canvas.isDrawingMode = true;
     canvas.freeDrawingBrush.width = 5;
-    canvas.freeDrawingBrush.color = '#000';
     
     console.log('mode is now ', mode);
 }
@@ -88,3 +87,12 @@ const selectClick = () => {
     canvas.isDrawingMode = false;
     console.log('mode is now ', mode);
 }
+
+var colorSelect = document.getElementById("colorSelect");
+
+const watchColor = e => {
+    fillColor = e.target.value;
+    canvas.freeDrawingBrush.color = fillColor;
+}
+
+colorSelect.addEventListener("change", watchColor);
