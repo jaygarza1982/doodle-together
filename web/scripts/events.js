@@ -3,6 +3,11 @@ var socket = io();
 
 var currentlyHovering = false;
 
+var mouseDown = false;
+
+// Other users will use this brush
+var brush = new fabric.PencilBrush(canvas);
+
 // Events setup
 canvas.on('mouse:over', e => {
     if (mode != 'select') return;
@@ -18,6 +23,8 @@ canvas.on('mouse:over', e => {
 });
 
 canvas.on('mouse:up', e => {
+    mouseDown = false;
+
     if (mode != 'select') return;
     if (!e?.target?.id) return;
     
@@ -63,6 +70,21 @@ canvas.on('path:created', e => {
 
     // Send update to server
     sendRawUpdate({ id: e.path.id, object: addedDrawing });
+});
+
+canvas.on('mouse:down', e => {
+    mouseDown = true;
+});
+
+// On mouse down, moving, and drawing
+canvas.on('mouse:move', e => {
+    if (!mouseDown || !canvas.isDrawingMode) return;
+
+    console.log('Moving and drawing at', canvas.getPointer(e));
+
+    const { x, y } = canvas.getPointer(e);
+
+    socket.emit('generic', { x, y, type: 'drawing' });
 });
 
 const sendRawUpdate = object => {

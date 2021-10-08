@@ -20,6 +20,13 @@ const typeAction = {
         
         canvas.add(new fabric.Path(stringPath, object));
     },
+    // When a user is currently drawing
+    'drawing': object => {
+        console.log('Drawing event fired', object);
+        const { x, y } = object;
+
+        brush.onMouseMove({ x, y }, { e: {} });
+    },
 };
 
 (async () => {
@@ -58,6 +65,12 @@ const typeAction = {
             }
 
             canvas.renderAll();
+        });
+
+        socket.on('generic', msg => {
+            console.log('generic', msg);
+
+            typeAction[msg.type](msg);
         });
     } catch (error) {
         console.log(error);

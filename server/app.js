@@ -60,6 +60,9 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Relay generic messages
+  socket.on('generic', msg => { io.emit('generic', msg); });
+
 });
 
 http.listen(port, () => {
