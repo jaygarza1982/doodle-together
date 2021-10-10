@@ -5,8 +5,8 @@ var currentlyHovering = false;
 
 var mouseDown = false;
 
-// Other users will use this brush
-var brush = new fabric.PencilBrush(canvas);
+var previousDrawX = -1;
+var previousDrawY = -1;
 
 // Events setup
 canvas.on('mouse:over', e => {
@@ -24,6 +24,10 @@ canvas.on('mouse:over', e => {
 
 canvas.on('mouse:up', e => {
     mouseDown = false;
+
+    // Reset draw points
+    previousDrawX = -1;
+    previousDrawY = -1;
 
     if (mode != 'select') return;
     if (!e?.target?.id) return;
@@ -81,10 +85,30 @@ canvas.on('mouse:move', e => {
     if (!mouseDown || !canvas.isDrawingMode) return;
 
     console.log('Moving and drawing at', canvas.getPointer(e));
-
     const { x, y } = canvas.getPointer(e);
 
-    socket.emit('generic', { x, y, type: 'drawing' });
+    // Use current x or y if they are -1
+    previousDrawX = previousDrawX == -1 ? x : previousDrawX;
+    previousDrawY = previousDrawY == -1 ? y : previousDrawY;
+
+    console.log('Previous', previousDrawX, previousDrawY, 'current', x, y);
+
+    let line = new fabric.Line([previousDrawX, previousDrawY, x, y], {
+        fill: 'red',
+        stroke: 'red',
+        strokeWidth: 5,
+        selectable: true,
+    });
+
+    // TODO: Emit this line, mark for later deletion after mouse is up
+    canvas.add(line);
+
+    previousDrawX = x;
+    previousDrawY = y;
+
+    // TODO: Emit temp path
+    // TODO: Mark for deletion after path is fully created and the mouse is up again
+    // socket.emit('generic', { x, y, type: 'drawing' });
 });
 
 const sendRawUpdate = object => {

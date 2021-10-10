@@ -23,9 +23,9 @@ const typeAction = {
     // When a user is currently drawing
     'drawing': object => {
         console.log('Drawing event fired', object);
-        const { x, y } = object;
+        // const { x, y } = object;
 
-        brush.onMouseMove({ x, y }, { e: {} });
+        // brush.onMouseMove({ x, y }, { e: {} });
     },
 };
 
