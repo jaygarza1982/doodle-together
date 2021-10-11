@@ -3,6 +3,8 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000;
 
+const { eventAction } = require('./services/events');
+
 const getRandom = (max) => { return Math.random() * max; }
 
 let userDrawings = {
@@ -61,7 +63,11 @@ io.on('connection', (socket) => {
   });
 
   // Relay generic messages
-  socket.on('generic', msg => { io.emit('generic', msg); });
+  socket.on('generic', msg => {
+    io.emit('generic', msg);
+
+    eventAction(msg, userDrawings);
+  });
 
 });
 

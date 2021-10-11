@@ -10,6 +10,11 @@ var previousDrawY = -1;
 
 var linesToDelete = [];
 
+// The amount of events when drawing and the mouse is moving
+// we will use this for checking if we should send an event
+// we will not send every event, only if a multiple of some number
+var mouseMoveWhileDrawCount = 0;
+
 // Events setup
 canvas.on('mouse:over', e => {
     if (mode != 'select') return;
@@ -30,6 +35,9 @@ canvas.on('mouse:up', e => {
     // Reset draw points
     previousDrawX = -1;
     previousDrawY = -1;
+
+    // Delete objects marked as temp
+    socket.emit('generic', { type: 'delete', idArray: linesToDelete });
 
     if (mode != 'select') return;
     if (!e?.target?.id) return;
@@ -98,11 +106,16 @@ canvas.on('mouse:move', e => {
 
     const lineArray = [previousDrawX, previousDrawY, x, y];
     const lineProperties = {
-        fill: 'red',
-        stroke: 'red',
+        fill: fillColor,
+        stroke: fillColor,
         strokeWidth: 5,
         id: lineId,
     }
+
+    mouseMoveWhileDrawCount++;
+
+    // Do not send events if not a multiple of 10
+    if (mouseMoveWhileDrawCount % 10 != 0) return;
 
     sendRawUpdate({ id: lineId, object: { type: 'drawing', lineArray, lineProperties } });
 

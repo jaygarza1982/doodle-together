@@ -29,6 +29,16 @@ const typeAction = {
         
         canvas.add(line);
     },
+    // Deleting many objects
+    'delete': object => {
+        console.log('Delete fired', object);
+
+        const { idArray } = object;
+
+        idArray.forEach(id => {
+            canvas.remove(canvas.getObjects().find(o => o.id == id));
+        });
+    },
 };
 
 (async () => {
