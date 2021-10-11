@@ -8,6 +8,8 @@ var mouseDown = false;
 var previousDrawX = -1;
 var previousDrawY = -1;
 
+var linesToDelete = [];
+
 // Events setup
 canvas.on('mouse:over', e => {
     if (mode != 'select') return;
@@ -91,23 +93,23 @@ canvas.on('mouse:move', e => {
     previousDrawX = previousDrawX == -1 ? x : previousDrawX;
     previousDrawY = previousDrawY == -1 ? y : previousDrawY;
 
-    console.log('Previous', previousDrawX, previousDrawY, 'current', x, y);
+    const lineId = Math.random() + '';
+    linesToDelete.push(lineId);
 
-    let line = new fabric.Line([previousDrawX, previousDrawY, x, y], {
+    const lineArray = [previousDrawX, previousDrawY, x, y];
+    const lineProperties = {
         fill: 'red',
         stroke: 'red',
         strokeWidth: 5,
-        selectable: true,
-    });
+        id: lineId,
+    }
 
-    // TODO: Emit this line, mark for later deletion after mouse is up
-    canvas.add(line);
+    sendRawUpdate({ id: lineId, object: { type: 'drawing', lineArray, lineProperties } });
 
     previousDrawX = x;
     previousDrawY = y;
 
-    // TODO: Emit temp path
-    // TODO: Mark for deletion after path is fully created and the mouse is up again
+    // TODO: Send for deletion after path is fully created and the mouse is up again
     // socket.emit('generic', { x, y, type: 'drawing' });
 });
 
