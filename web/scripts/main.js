@@ -24,6 +24,10 @@ const typeAction = {
     'drawing': object => {
         console.log('Drawing event fired', object);
         const { lineArray, lineProperties } = object;
+
+        // Stop if we are going to delete this later
+        // This means that we are currently drawing
+        if (linesToDelete.includes(lineProperties.id)) return;
         
         const line = new fabric.Line(lineArray, lineProperties);
         

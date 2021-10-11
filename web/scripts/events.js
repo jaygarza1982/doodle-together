@@ -121,9 +121,6 @@ canvas.on('mouse:move', e => {
 
     previousDrawX = x;
     previousDrawY = y;
-
-    // TODO: Send for deletion after path is fully created and the mouse is up again
-    // socket.emit('generic', { x, y, type: 'drawing' });
 });
 
 const sendRawUpdate = object => {
@@ -157,3 +154,26 @@ const watchColor = e => {
 }
 
 colorSelect.addEventListener("change", watchColor);
+
+// Key events
+document.getElementsByTagName('body')[0].addEventListener('keydown', e => {
+    const { key } = e;
+
+    if (key == 'Delete') {
+        // Try delete if there is 1 object
+        try {
+            const { id } = canvas.getActiveObject();
+    
+            socket.emit('generic', { type: 'delete', idArray: [id] });
+        } catch (error) { }
+        
+        // Try delete if there are many objects
+        try {
+            const { _objects } = canvas.getActiveObject();
+
+            const deleteIds = _objects.map(o => o.id);
+    
+            socket.emit('generic', { type: 'delete', idArray: deleteIds });
+        } catch (error) { }
+    }
+});
