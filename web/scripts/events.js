@@ -108,7 +108,8 @@ canvas.on('mouse:move', e => {
     const lineProperties = {
         fill: fillColor,
         stroke: fillColor,
-        strokeWidth: 5,
+        // Send line width as integer
+        strokeWidth: parseInt(lineWidth),
         id: lineId,
     }
 
@@ -135,7 +136,7 @@ const drawingClick = () => {
     mode = 'draw';
 
     canvas.isDrawingMode = true;
-    canvas.freeDrawingBrush.width = 5;
+    canvas.freeDrawingBrush.width = lineWidth;
     
     console.log('mode is now ', mode);
 }
@@ -176,4 +177,12 @@ document.getElementsByTagName('body')[0].addEventListener('keydown', e => {
             socket.emit('generic', { type: 'delete', idArray: deleteIds });
         } catch (error) { }
     }
+});
+
+document.getElementById('lineWidthInput').addEventListener('change', e => {
+    lineWidth =  e.target.value;
+
+    document.getElementById('lineWidth').innerText = lineWidth;
+
+    canvas.freeDrawingBrush.width = lineWidth;
 });
