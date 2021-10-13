@@ -6,6 +6,9 @@ var fillColor = '#000';
 
 var lineWidth = 5;
 
+// Set background color
+canvas.backgroundColor = '#fff';
+
 const typeAction = {
     'i-text': object => {
         canvas.add(new fabric.IText(object.text, object));

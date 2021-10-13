@@ -1,6 +1,12 @@
 
+body {
+    color: white;
+    background-color: black;
+}
+
 .nav-bar {
     display: flex;
+    padding: 10px;
 }
 
 .nav-bar-item {
@@ -10,5 +16,5 @@
 .mui-navbar-icon {
     width: 21px;
     height: 21px;
-    font-size: 1rem;
+    fill: white;
 }
