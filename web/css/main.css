@@ -6,3 +6,9 @@
 .nav-bar-item {
     margin: 0px 10px 0px 10px;
 }
+
+.mui-navbar-icon {
+    width: 21px;
+    height: 21px;
+    font-size: 1rem;
+}

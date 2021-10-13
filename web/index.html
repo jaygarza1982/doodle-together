@@ -9,8 +9,20 @@
 </head>
 <body>
     <nav class="nav-bar">
-        <div onclick="drawingClick()" class="nav-bar-item">Drawing</div>
-        <div onclick="selectClick()" class="nav-bar-item">Select</div>
+        <div onclick="drawingClick()" class="nav-bar-item">
+            <svg class="mui-navbar-icon">
+                <path
+                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
+                </path>
+            </svg>
+        </div>
+        <div onclick="selectClick()" class="nav-bar-item">
+            <svg class="mui-navbar-icon">
+                <path
+                    d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z">
+                </path>
+            </svg>
+        </div>
         <div><input id="colorSelect" type="color" class="nav-bar-item"></div>
 
         <div>Line Width</div>
