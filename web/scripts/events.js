@@ -10,6 +10,8 @@ var previousDrawY = -1;
 
 var linesToDelete = [];
 
+var objectSelectIndex = 0;
+
 // The amount of events when drawing and the mouse is moving
 // we will use this for checking if we should send an event
 // we will not send every event, only if a multiple of some number
@@ -176,6 +178,28 @@ document.getElementsByTagName('body')[0].addEventListener('keydown', e => {
     
             socket.emit('generic', { type: 'delete', idArray: deleteIds });
         } catch (error) { }
+    }
+    else if (key == 'ArrowRight') {
+        objectSelectIndex++;
+
+        // Do not go over the number of objects
+        objectSelectIndex %= canvas.getObjects().length;
+
+        console.log('Selecting', objectSelectIndex);
+
+        canvas.setActiveObject(canvas.getObjects()[objectSelectIndex]);
+        canvas.renderAll();
+    }
+    else if (key == 'ArrowLeft') {
+        objectSelectIndex--;
+
+        // Do not let go negative, reset to last object
+        objectSelectIndex = objectSelectIndex < 0 ? canvas.getObjects().length - 1 : objectSelectIndex;
+
+        console.log('Selecting', objectSelectIndex);
+
+        canvas.setActiveObject(canvas.getObjects()[objectSelectIndex]);
+        canvas.renderAll();
     }
 });
 
