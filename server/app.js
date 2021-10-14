@@ -44,6 +44,10 @@ app.get('/api/objects', (req, res) => {
   res.send(userDrawings);
 });
 
+app.post('/api/objects/clear', (req, res) => {
+  res.send();
+});
+
 io.on('connection', (socket) => {
 
   socket.on('object-event', msg => {

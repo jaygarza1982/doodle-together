@@ -13,6 +13,15 @@ services:
       - 8051:3000
     command: nodemon app.js
 
+  server-clear:
+    container_name: 'doodle-delete'
+    build:
+      context: ./delete-scheduler
+    volumes:
+      - /app/node_modules
+      - ./delete-scheduler:/app
+    command: node main.js
+
   web-server:
     image: nginx
     volumes:
